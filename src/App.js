@@ -1,3 +1,15 @@
+import './App.css';
+function App() {
+  return (
+    <div className="app-background">
+      
+      <h2>Welcome to UniChat</h2>
+      
+    </div>
+  );
+}
+
+export default App;
 
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';

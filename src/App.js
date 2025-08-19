@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3001'); // For later, change to deployment backend URL
+const socket = io('https://unichat-app-backend-5fob.onrender.com');
 
 function App() {
   const [username, setUsername] = useState('');

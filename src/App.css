@@ -1,7 +1,7 @@
 /* App.css */
 .app-background {
   min-height: 100vh;
-  background: url('/your-name-bg.jpg') center center / cover no-repeat;
+  background: url('/your-name-bg.jpg ') center center / cover no-repeat;
   position: relative;
   /* Makes sure all child elements are above the overlay by default */
   z-index: 0;

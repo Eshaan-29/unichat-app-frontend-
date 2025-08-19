@@ -1,7 +1,31 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+
+
+const theme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: { main: '#1976d2', contrastText: '#fff' },
+    secondary: { main: '#26c6da' },
+    background: { default: '#f4f6fa', paper: '#ffffff' },
+    error: { main: '#e53935' },
+    success: { main: '#43a047' }
+  },
+  typography: { fontFamily: '"Segoe UI", "Roboto", "Arial", sans-serif' },
+  shape: { borderRadius: 14 },
+  components: {
+    MuiButton: { styleOverrides: { root: { textTransform: 'none', fontWeight: 600, fontSize: '1rem' } } },
+    MuiPaper: { styleOverrides: { root: { borderRadius: 16 } } }
+  }
+})
+
 
 const socket = io('https://unichat-app-backend-5fob.onrender.com');
+
 
 function App() {
   const [username, setUsername] = useState('');
@@ -47,69 +71,82 @@ function App() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: 'auto', padding: 20 }}>
-      {!joined ? (
-        <div>
-          <h2>Welcome to UniChat</h2>
-          <input
-            type="text"
-            placeholder="Enter username"
-            value={username}
-            maxLength={20}
-            onChange={(e) => setUsername(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && joinChat()}
-            style={{ width: '100%', padding: 10, fontSize: 16 }}
-          />
-          <button onClick={joinChat} style={{ marginTop: 10, padding: '10px 20px', fontSize: 16 }}>
-            Join Chat
-          </button>
-        </div>
-      ) : (
-        <div>
-          <h2>Hi {username}</h2>
-          <div
-            style={{
-              border: '1px solid #ccc',
-              height: 400,
-              overflowY: 'auto',
-              padding: 10,
-              marginBottom: 10,
-              backgroundColor: '#f9f9f9',
-            }}
-          >
-            {messages.map((msg, idx) =>
-              msg.system ? (
-                <div key={idx} style={{ color: '#888', fontStyle: 'italic', margin: '5px 0' }}>
-                  {msg.text}
-                </div>
-              ) : (
-                <div key={idx} style={{ marginBottom: 8 }}>
-                  <b>{msg.username}:</b> {msg.text}{' '}
-                  <span style={{ fontSize: 10, color: '#aaa' }}>
-                    {new Date(msg.timestamp).toLocaleTimeString()}
-                  </span>
-                </div>
-              )
-            )}
-            <div ref={scrollRef} />
+    <ThemeProvider theme={theme}>
+      <div style={{ maxWidth: 600, margin: 'auto', padding: 20 }}>
+        {!joined ? (
+          <div>
+            <h2>Welcome to UniChat</h2>
+            <TextField
+              label="Enter username"
+              value={username}
+              inputProps={{ maxLength: 20 }}
+              onChange={(e) => setUsername(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && joinChat()}
+              fullWidth
+              margin="normal"
+            />
+            <Button
+              onClick={joinChat}
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 1 }}
+            >
+              Join Chat
+            </Button>
           </div>
-          <input
-            type="text"
-            placeholder="Type your message (max 500 chars)"
-            maxLength={500}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-            style={{ width: '100%', padding: 10, fontSize: 16 }}
-          />
-          <button onClick={sendMessage} style={{ marginTop: 10, padding: '10px 20px', fontSize: 16 }}>
-            Send
-          </button>
-        </div>
-      )}
-    </div>
+        ) : (
+          <div>
+            <h2>Hi {username}</h2>
+            <div
+              style={{
+                border: '1px solid #ccc',
+                height: 400,
+                overflowY: 'auto',
+                padding: 10,
+                marginBottom: 10,
+                backgroundColor: '#f9f9f9',
+              }}
+            >
+              {messages.map((msg, idx) =>
+                msg.system ? (
+                  <div key={idx} style={{ color: '#888', fontStyle: 'italic', margin: '5px 0' }}>
+                    {msg.text}
+                  </div>
+                ) : (
+                  <div key={idx} style={{ marginBottom: 8 }}>
+                    <b>{msg.username}:</b> {msg.text}{' '}
+                    <span style={{ fontSize: 10, color: '#aaa' }}>
+                      {new Date(msg.timestamp).toLocaleTimeString()}
+                    </span>
+                  </div>
+                )
+              )}
+              <div ref={scrollRef} />
+            </div>
+            <TextField
+              placeholder="Type your message (max 500 chars)"
+              inputProps={{ maxLength: 500 }}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+              fullWidth
+              margin="normal"
+            />
+            <Button
+              onClick={sendMessage}
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 1 }}
+            >
+              Send
+            </Button>
+          </div>
+        )}
+      </div>
+    </ThemeProvider>
   );
 }
 
 export default App;
-
